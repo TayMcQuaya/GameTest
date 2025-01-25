@@ -4,14 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Unity Web Player | Flopy Tromp</title>
+    <title>Unity Web Player | TEST-GAME</title>
     
     <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; connect-src https://backendtromp.com ws://backendtromp.com wss://backendtromp.com 'self';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; connect-src https://backendtromptest.com ws://backendtromptest.com wss://backendtromptest.com 'self';">
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
     
     <style>
+      /* Your existing styles remain unchanged */
       html, body {
         width: 100%;
         height: 100%;
@@ -133,14 +134,15 @@
     </div>
     <script>
       var unityInstance = null;
+      var buildName = "TEST-GAME";  // Change this to match your Unity build name
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/FloppyTrompgameLIVE.loader.js";
+      var loaderUrl = buildUrl + "/" + buildName + ".loader.js";
       var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       
       var config = {
-        dataUrl: buildUrl + "/FloppyTrompgameLIVE.data",
-        frameworkUrl: buildUrl + "/FloppyTrompgameLIVE.framework.js",
-        codeUrl: buildUrl + "/FloppyTrompgameLIVE.wasm",
+        dataUrl: buildUrl + "/" + buildName + ".data",
+        frameworkUrl: buildUrl + "/" + buildName + ".framework.js",
+        codeUrl: buildUrl + "/" + buildName + ".wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "TeamMurica",
         productName: "Flopy Tromp",
@@ -159,6 +161,13 @@
       var mobileWarning = document.querySelector("#unity-mobile-warning");
       var fullscreenButton = document.querySelector("#fullscreen-button");
 
+      // Add verbose error logging
+      window.onerror = function(msg, url, line, col, error) {
+        console.error(`Error: ${msg}\nAt: ${url}:${line}`);
+        console.error('Full error:', error);
+        return false;
+      };
+
       function resizeGame() {
         var windowWidth = window.innerWidth;
         var windowHeight = window.innerHeight;
@@ -167,12 +176,10 @@
 
         if (isMobile) {
           if (windowWidth < windowHeight) {
-            // Portrait mode
             canvas.style.width = windowHeight + 'px';
             canvas.style.height = windowWidth + 'px';
             mobileWarning.style.display = 'block';
           } else {
-            // Landscape mode
             canvas.style.width = windowWidth + 'px';
             canvas.style.height = windowHeight + 'px';
             mobileWarning.style.display = 'none';
@@ -210,22 +217,15 @@
 
       if (isMobile) {
         container.className = "unity-mobile";
-        
-        // For mobile, show fullscreen button that forces landscape
         fullscreenButton.style.display = "block";
         fullscreenButton.addEventListener('click', function() {
           if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('landscape').then(function() {
-              toggleFullscreen();
-            }).catch(function() {
-              toggleFullscreen();
-            });
+            screen.orientation.lock('landscape').then(toggleFullscreen).catch(toggleFullscreen);
           } else {
             toggleFullscreen();
           }
         });
       } else {
-        // For desktop, show regular fullscreen button
         fullscreenButton.style.display = "block";
         fullscreenButton.addEventListener('click', toggleFullscreen);
       }
@@ -241,21 +241,27 @@
         }).then((instance) => {
           loadingBar.style.display = "none";
           window.unityInstance = instance;
-          console.log("Unity WebGL initialized successfully");
+          console.log("Unity WebGL initialized successfully on test environment");
         }).catch((message) => {
           console.error("Unity WebGL initialization error:", message);
-          alert("Failed to initialize game: " + message);
+          alert("Failed to initialize game.\nError: " + message + 
+                "\nPlease verify:\n1. Build files exist in correct location" +
+                "\n2. Server connection at backendtromptest.com is working" +
+                "\n3. File names match Unity build names");
         });
       };
 
       script.onerror = (error) => {
         console.error("Failed to load Unity loader:", error);
-        alert("Failed to load game resources. Please check your connection and try again.");
+        console.error("Attempted to load:", loaderUrl);
+        alert("Failed to load game files. Please verify:\n" +
+              "1. File exists: " + loaderUrl + "\n" +
+              "2. Build name matches: " + buildName + "\n" +
+              "3. Files are in correct directory: " + buildUrl);
       };
 
       document.body.appendChild(script);
 
-      // Handle resize and orientation changes
       window.addEventListener('resize', resizeGame);
       window.addEventListener('orientationchange', function() {
         setTimeout(resizeGame, 100);
@@ -264,18 +270,15 @@
         }
       });
 
-      // CORS error handling
       window.addEventListener('unhandledrejection', function(event) {
         console.error('Unhandled promise rejection:', event.reason);
         if (event.reason.toString().includes('CORS')) {
-          console.error('CORS error detected. Please check server configuration.');
+          console.error('CORS error detected - verify CORS settings on backendtromptest.com');
         }
       });
 
-      // Initial resize
       resizeGame();
 
-      // Handle fullscreen changes
       document.addEventListener('fullscreenchange', resizeGame);
       document.addEventListener('webkitfullscreenchange', resizeGame);
       document.addEventListener('mozfullscreenchange', resizeGame);
