@@ -7,7 +7,7 @@
     <title>Unity Web Player | Flopy Tromp</title>
     
     <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; connect-src https://backendtromp.com ws://backendtromp.com wss://backendtromp.com 'self';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; connect-src https://backendtromptest.com ws://backendtromptest.com wss://backendtromptest.com 'self';">
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
     
@@ -134,13 +134,13 @@
     <script>
       var unityInstance = null;
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/FloppyTrompgameLIVE.loader.js";
+      var loaderUrl = buildUrl + "/TEST-GAME.loader.js";
       var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       
       var config = {
-        dataUrl: buildUrl + "/FloppyTrompgameLIVE.data",
-        frameworkUrl: buildUrl + "/FloppyTrompgameLIVE.framework.js",
-        codeUrl: buildUrl + "/FloppyTrompgameLIVE.wasm",
+        dataUrl: buildUrl + "/TEST-GAME.data",
+        frameworkUrl: buildUrl + "/TEST-GAME.framework.js",
+        codeUrl: buildUrl + "/TEST-GAME.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "TeamMurica",
         productName: "Flopy Tromp",
