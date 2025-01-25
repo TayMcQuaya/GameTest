@@ -134,13 +134,13 @@
     <script>
       var unityInstance = null;
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/TEST-GAME.loader.js";
+      var loaderUrl = buildUrl + "/FloppyTrompgameLIVE.loader.js";
       var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       
       var config = {
-        dataUrl: buildUrl + "/TEST-GAME.data",
-        frameworkUrl: buildUrl + "/TEST-GAME.framework.js",
-        codeUrl: buildUrl + "/TEST-GAME.wasm",
+        dataUrl: buildUrl + "/FloppyTrompgameLIVE.data",
+        frameworkUrl: buildUrl + "/FloppyTrompgameLIVE.framework.js",
+        codeUrl: buildUrl + "/FloppyTrompgameLIVE.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "TeamMurica",
         productName: "Flopy Tromp",
@@ -244,7 +244,7 @@
           console.log("Unity WebGL initialized successfully");
         }).catch((message) => {
           console.error("Unity WebGL initialization error:", message);
-          alert("Failed to initialize game: " + message);
+          alert("Failed to initialize game: " + message + "\nPlease verify connection to backendtromptest.com");
         });
       };
 
@@ -264,11 +264,11 @@
         }
       });
 
-      // CORS error handling
+      // Enhanced CORS error handling
       window.addEventListener('unhandledrejection', function(event) {
         console.error('Unhandled promise rejection:', event.reason);
         if (event.reason.toString().includes('CORS')) {
-          console.error('CORS error detected. Please check server configuration.');
+          console.error('CORS error detected. Please verify CORS settings on backendtromptest.com');
         }
       });
 
